@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Avatar, Button, IconButton } from "@material-ui/core";
+import Chat from "./Chat";
 import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
@@ -19,13 +20,14 @@ function Sidebar() {
     const input = prompt(
       "Please enter an email address for the user you wish to chat with"
     );
-
+    console.log(`INPUT: ${input}`);
     if (!input) return null;
     if (
       EmailValidator.validate(input) &&
-      !chatAlreadyExists &&
+      !chatAlreadyExists(input) &&
       input !== user.email
     ) {
+      console.log(`STATE: ${true}`);
       // We need to add chat to DB "chat" collection
       db.collection("chats").add({
         users: [user.email, input],
@@ -59,6 +61,9 @@ function Sidebar() {
       <SidebarButton onClick={createChat}>Start new chat</SidebarButton>
 
       {/* List of chats */}
+      {chatSnapshot?.docs.map((chat) => (
+        <Chat key={chat.id} id={chat.id} users={chat.data().users} />
+      ))}
     </Container>
   );
 }
