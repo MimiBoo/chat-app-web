@@ -2,14 +2,31 @@ import styled from "styled-components";
 import { Avatar } from "@material-ui/core";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { useRouter } from "next/router";
 
 function Chat({ id, users }) {
+  const router = useRouter();
   const [user] = useAuthState(auth);
   const recipientEmail = getRecipientEmail(users, user);
+  const [recipientSnapshot] = useCollection(
+    db.collection("users").where("email", "==", recipientEmail)
+  );
+  const recipient = recipientSnapshot?.docs?.[0]?.data();
+
+  const enterChat = () => {
+    router.push(`/chat/${id}`);
+  };
+
   return (
-    <Container>
-      <UserAvatar />
+    <Container onClick={enterChat}>
+      {recipient ? (
+        <UserAvatar src={recipient?.photoUrl} />
+      ) : (
+        <UserAvatar>{recipientEmail[0]}</UserAvatar>
+      )}
+
       <p>{recipientEmail}</p>
     </Container>
   );
