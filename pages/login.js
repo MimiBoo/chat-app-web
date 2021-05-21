@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Head from "next/head";
-import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
+import HealingIcon from "@material-ui/icons/Healing";
 import { Button } from "@material-ui/core";
 import { auth, provider } from "../firebase";
 
@@ -14,7 +14,7 @@ function login() {
         <title>Login</title>
       </Head>
       <LoginContainer>
-        <LocalHospitalIcon
+        <HealingIcon
           color="secondary"
           style={{ fontSize: 200, marginBottom: 50 }}
         />
